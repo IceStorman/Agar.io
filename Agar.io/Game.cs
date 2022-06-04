@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
+using SFML.System;
 using System;
 
 namespace Agar.io
@@ -8,11 +9,14 @@ namespace Agar.io
     {
         public const int default_window_width = 1600;
         public const int default_window_height = 900;
+        public const string game_name = "Agar.io";
 
         public void Run()
         {
-            RenderWindow window = new RenderWindow(new VideoMode(default_window_width, default_window_height), "Agar.io");
+            RenderWindow window = new RenderWindow(new VideoMode(default_window_width, default_window_height), game_name);
             window.Closed += WindowClosed;
+
+            Drawable[] foods = FoodFactory();
 
             window.Clear(Color.Cyan);
 
@@ -20,12 +24,25 @@ namespace Agar.io
             {
                 window.DispatchEvents();
 
-                Drawable food = SpawnFood(SetFoodType());
-
-                window.Draw(food);
+                for (int i = 0; i < foods.Length; i++)
+                {
+                    window.Draw(foods[i]);
+                }
 
                 window.Display();
             }
+        }
+
+        private Drawable[] FoodFactory()
+        {
+            Drawable[] foods = new Drawable[Food.maxCountOfFood];
+
+            for(int i = Food.countOfFood; i < foods.Length; i++)
+            {
+                Food.countOfFood++;
+                foods[i] = SpawnFood(SetFoodType());
+            }
+            return foods;
         }
 
         private CircleShape SpawnFood(string foodType)
@@ -71,10 +88,10 @@ namespace Agar.io
             return "";
         }
 
-        private SFML.System.Vector2f SetFoodPos()
+        private Vector2f SetFoodPos()
         {
             Random random = new Random();
-            SFML.System.Vector2f newFoodPos = new SFML.System.Vector2f(random.Next(0, default_window_width), random.Next(0, default_window_height));
+            Vector2f newFoodPos = new Vector2f(random.Next(0, default_window_width), random.Next(0, default_window_height));
             return newFoodPos;
         }
 

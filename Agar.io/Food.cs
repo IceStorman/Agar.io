@@ -6,5 +6,7 @@ namespace Agar.io
     {
         public CircleShape foodSprite = new CircleShape();
         public Color foodColor;
+        public static int countOfFood = 0;
+        public static int maxCountOfFood = 18;
     }
 }
