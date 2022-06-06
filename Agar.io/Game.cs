@@ -2,6 +2,7 @@
 using SFML.Window;
 using SFML.System;
 using System;
+using System.Collections.Generic;
 
 namespace Agar.io
 {
@@ -10,42 +11,49 @@ namespace Agar.io
         public const int default_window_width = 1600;
         public const int default_window_height = 900;
         public const string game_name = "Agar.io";
+        private readonly Random random = new Random();
 
         public void Run()
         {
             RenderWindow window = new RenderWindow(new VideoMode(default_window_width, default_window_height), game_name);
             window.Closed += WindowClosed;
 
-            Drawable[] foods = FoodFactory();
+            List<Food> foods = FoodFactory();
 
             window.Clear(Color.Cyan);
+
+            /*foreach(Food food in foods)
+            {
+                window.Draw(food.foodSprite);
+                window.Display();
+            }*/
 
             while (window.IsOpen)
             {
                 window.DispatchEvents();
-
-                for (int i = 0; i < foods.Length; i++)
+                //window.Clear();
+                foreach(var food in foods)
                 {
-                    window.Draw(foods[i]);
+                    window.Draw(food.foodSprite);
                 }
 
                 window.Display();
             }
         }
 
-        private Drawable[] FoodFactory()
+        private List<Food> FoodFactory()
         {
-            Drawable[] foods = new Drawable[Food.maxCountOfFood];
+            List<Food> foods = new List<Food>();
+            foods.Capacity = Food.maxCountOfFood;
 
-            for(int i = Food.countOfFood; i < foods.Length; i++)
+            for(int i = 0; i < foods.Capacity; i++)
             {
-                Food.countOfFood++;
-                foods[i] = SpawnFood(SetFoodType());
+                foods.Add(SpawnFood(SetFoodType()));
             }
             return foods;
         }
 
-        private CircleShape SpawnFood(string foodType)
+        private Food SpawnFood(string foodType)
         {
             Food food = new Food();
 
@@ -66,16 +74,62 @@ namespace Agar.io
             }
 
             food.foodSprite.FillColor = food.foodColor;
-            food.foodSprite.Position = SetFoodPos();
+            food.foodSprite.Position = SetRandomPos();
 
-            return food.foodSprite;
+            return food;
+        }
+
+        private CircleShape SpawnPlayers(string playerType)
+        {
+            Player player = new Player();
+
+            switch (playerType)
+            {
+                case "Blue":
+                    player.playerColor = Color.Blue;
+                    player.isBot = false;
+                    break;
+                case "Red":
+                    player.playerColor = Color.Red;
+                    break;
+                case "White":
+                    player.playerColor = Color.White;
+                    break;
+                case "Yellow":
+                    player.playerColor = Color.Yellow;
+                    break;
+                case "Green":
+                    player.playerColor = Color.Green;
+                    break;
+            }
+            player.playerSprite.FillColor = player.playerColor;
+            return player.playerSprite;
+        }
+
+        private string SetPlayerType()
+        {
+            Random rnd = new Random();
+
+            switch(rnd.Next(0, 5))
+            {
+                case 0:
+                    return "Blue";
+                case 1:
+                    return "Red";
+                case 2:
+                    return "White";
+                case 3:
+                    return "Yellow";
+                case 4:
+                    return "Green";
+            }
+            return "";
         }
 
         private string SetFoodType()
         {
-            Random rand = new Random();
 
-            switch (rand.Next(0, 3))
+            switch (random.Next(0, 3))
             {
                 case 0:
                     return "small";
@@ -83,16 +137,15 @@ namespace Agar.io
                     return "medium";
                 case 2:
                     return "big";
+                default:
+                    return "";
             }
-
-            return "";
         }
 
-        private Vector2f SetFoodPos()
+        private Vector2f SetRandomPos()
         {
-            Random random = new Random();
-            Vector2f newFoodPos = new Vector2f(random.Next(0, default_window_width), random.Next(0, default_window_height));
-            return newFoodPos;
+            Vector2f newRandomPos = new Vector2f(random.Next(0, default_window_width), random.Next(0, default_window_height));
+            return newRandomPos;
         }
 
         private void WindowClosed(object sender, EventArgs e)
