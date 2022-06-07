@@ -11,27 +11,38 @@ namespace Agar.io
         public const int default_window_width = 1600;
         public const int default_window_height = 900;
         public const string game_name = "Agar.io";
+        private RenderWindow window = null;
         private readonly Random random = new Random();
+
+        private List<Food> foods = null;
 
         public void Run()
         {
-            RenderWindow window = new RenderWindow(new VideoMode(default_window_width, default_window_height), game_name);
+            window = new RenderWindow(new VideoMode(default_window_width, default_window_height), game_name);
             window.Closed += WindowClosed;
 
-            List<Food> foods = FoodFactory();
-
-            window.Clear(Color.Cyan);
-
-            /*foreach(Food food in foods)
-            {
-                window.Draw(food.foodSprite);
-                window.Display();
-            }*/
+            (List<Player> realPlayers, List<Player> bots) = CreatePlayers();
+            foods = CreateFood();
 
             while (window.IsOpen)
             {
+                window.Clear(Color.Cyan);
                 window.DispatchEvents();
-                //window.Clear();
+
+                GetBotsInput(bots);
+                GetRealPlayersInput(realPlayers);
+
+                Move(realPlayers, bots);
+
+                foreach(var player in realPlayers)
+                {
+                    player.EatFood(foods);
+                    window.Draw(player.playerSprite);
+                }
+                foreach(var bot in bots)
+                {
+                    window.Draw(bot.playerSprite);
+                }
                 foreach(var food in foods)
                 {
                     window.Draw(food.foodSprite);
@@ -41,10 +52,12 @@ namespace Agar.io
             }
         }
 
-        private List<Food> FoodFactory()
+        private List<Food> CreateFood()
         {
-            List<Food> foods = new List<Food>();
-            foods.Capacity = Food.maxCountOfFood;
+            List<Food> foods = new List<Food>()
+            {
+                Capacity = Food.maxCountOfFood
+            };
 
             for(int i = 0; i < foods.Capacity; i++)
             {
@@ -56,61 +69,154 @@ namespace Agar.io
         private Food SpawnFood(string foodType)
         {
             Food food = new Food();
+            Color foodColor = Color.Green;
 
             switch (foodType)
             {
                 case "small":
-                    food.foodColor = Color.Green;
+                    foodColor = Color.Green;
                     food.foodSprite.Radius = 4;
                     break;
                 case "medium":
-                    food.foodColor = Color.White;
+                    foodColor = Color.White;
                     food.foodSprite.Radius = 8;
                     break;
                 case "big":
-                    food.foodColor = Color.Red;
+                    foodColor = Color.Red;
                     food.foodSprite.Radius = 16;
                     break;
             }
 
-            food.foodSprite.FillColor = food.foodColor;
+            food.foodSprite.FillColor = foodColor;
+            food.foodSprite.Origin = new Vector2f(food.foodSprite.Radius, food.foodSprite.Radius);
             food.foodSprite.Position = SetRandomPos();
 
             return food;
         }
+        
+        private string SetFoodType()
+        {
+            switch (random.Next(0, 3))
+            {
+                case 0:
+                    return "small";
+                case 1:
+                    return "medium";
+                case 2:
+                    return "big";
+                default:
+                    return "";
+            }
+        }
 
-        private CircleShape SpawnPlayers(string playerType)
+        private void GetBotsInput(List<Player> bots)
+        {
+            foreach(var bot in bots)
+            {
+                Vector2f botInput = new Vector2f();
+                switch(random.Next(0, 4))
+                {
+                    case 0:
+                        botInput = new Vector2f(0, -1);
+                        break;
+                    case 1:
+                        botInput = new Vector2f(-1, 0);
+                        break;
+                    case 2:
+                        botInput = new Vector2f(0, 1);
+                        break;
+                    case 3:
+                        botInput = new Vector2f(1, 0);
+                        break;
+                }
+                bot.direction = botInput;
+            }
+        }
+
+        private void GetRealPlayersInput(List<Player> realPlayers)
+        {
+            foreach (var player in realPlayers)
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.W))
+                    player.direction = new Vector2f(0, -1);
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.A))
+                    player.direction = new Vector2f(-1, 0);
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.S))
+                    player.direction = new Vector2f(0, 1);
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.D))
+                    player.direction = new Vector2f(1, 0);
+                else
+                    player.direction = new Vector2f(0, 0);
+            }
+        }
+
+        private void Move(List<Player> realPlayers, List<Player> bots)
+        {
+            foreach(var player in realPlayers)
+            {
+                player.playerSprite.Position += player.direction * player.speed;
+            }
+            foreach(var bot in bots)
+            {
+                bot.playerSprite.Position += bot.direction * bot.speed;
+            }
+        }
+
+        private (List<Player>, List<Player>) CreatePlayers()
+        {
+            List<Player> realPlayers = new List<Player>()
+            {
+                Capacity = Player.maxRealPlayers
+            };
+            List<Player> bots = new List<Player>()
+            {
+                Capacity = Player.maxBots
+            };
+
+            for(int i = 0; i < realPlayers.Capacity; i++)
+            {
+                realPlayers.Add(SpawnPlayers(SetPlayerType()));
+            }
+            for(int i = 0; i < bots.Capacity; i++)
+            {
+                bots.Add(SpawnPlayers(SetPlayerType()));
+            }
+
+            return (realPlayers, bots);
+        }
+
+        private Player SpawnPlayers(string playerType)
         {
             Player player = new Player();
+            Color playerColor = Color.White;
 
             switch (playerType)
             {
                 case "Blue":
-                    player.playerColor = Color.Blue;
-                    player.isBot = false;
+                    playerColor = Color.Blue;
                     break;
                 case "Red":
-                    player.playerColor = Color.Red;
+                    playerColor = Color.Red;
                     break;
                 case "White":
-                    player.playerColor = Color.White;
+                    playerColor = Color.White;
                     break;
                 case "Yellow":
-                    player.playerColor = Color.Yellow;
+                    playerColor = Color.Yellow;
                     break;
                 case "Green":
-                    player.playerColor = Color.Green;
+                    playerColor = Color.Green;
                     break;
             }
-            player.playerSprite.FillColor = player.playerColor;
-            return player.playerSprite;
+            player.playerSprite.FillColor = playerColor;
+            player.playerSprite.Radius = player.size * 2;
+            player.playerSprite.Position = SetRandomPos();
+            return player;
         }
 
         private string SetPlayerType()
         {
-            Random rnd = new Random();
-
-            switch(rnd.Next(0, 5))
+            switch(random.Next(0, 5))
             {
                 case 0:
                     return "Blue";
@@ -124,22 +230,6 @@ namespace Agar.io
                     return "Green";
             }
             return "";
-        }
-
-        private string SetFoodType()
-        {
-
-            switch (random.Next(0, 3))
-            {
-                case 0:
-                    return "small";
-                case 1:
-                    return "medium";
-                case 2:
-                    return "big";
-                default:
-                    return "";
-            }
         }
 
         private Vector2f SetRandomPos()

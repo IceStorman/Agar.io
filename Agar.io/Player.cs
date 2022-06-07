@@ -1,15 +1,17 @@
 ﻿using SFML.Graphics;
+using SFML.System;
 
 namespace Agar.io
 {
     public class Player
     {
-        public static double size = 16;
-        public CircleShape playerSprite;
-        public Color playerColor;
-        public bool isBot = true;
+        public float size = 16f;
+        public CircleShape playerSprite = new CircleShape();
+        public float speed = 1.5f;
+        public Vector2f direction;
 
-        public static int countOfPlayers;
-        public static int maxCountOfPlayers = 5;
+        public const int maxRealPlayers = 1;
+        public const int maxBots = 5;
+        public static int countOfAlivePlayers;
     }
 }
