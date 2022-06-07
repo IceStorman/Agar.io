@@ -11,18 +11,15 @@ namespace Agar.io
         public const int default_window_width = 1600;
         public const int default_window_height = 900;
         public const string game_name = "Agar.io";
-        private RenderWindow window = null;
         private readonly Random random = new Random();
-
-        private List<Food> foods = null;
 
         public void Run()
         {
-            window = new RenderWindow(new VideoMode(default_window_width, default_window_height), game_name);
+            RenderWindow window = new RenderWindow(new VideoMode(default_window_width, default_window_height), game_name);
             window.Closed += WindowClosed;
 
             (List<Player> realPlayers, List<Player> bots) = CreatePlayers();
-            foods = CreateFood();
+            List<Food> foods = CreateFood();
 
             while (window.IsOpen)
             {
@@ -36,7 +33,7 @@ namespace Agar.io
 
                 foreach(var player in realPlayers)
                 {
-                    player.EatFood(foods);
+                    //player.EatFood(foods);
                     window.Draw(player.playerSprite);
                 }
                 foreach(var bot in bots)
@@ -210,6 +207,7 @@ namespace Agar.io
             }
             player.playerSprite.FillColor = playerColor;
             player.playerSprite.Radius = player.size * 2;
+            player.playerSprite.Origin = new Vector2f(player.playerSprite.Radius, player.playerSprite.Radius);
             player.playerSprite.Position = SetRandomPos();
             return player;
         }
