@@ -5,7 +5,7 @@ namespace Agar.io
 {
     public class Player
     {
-        public float size = 16f;
+        public float size = 64f;
         public CircleShape playerSprite = new CircleShape();
         public float speed = 1.5f;
         public Vector2f direction;

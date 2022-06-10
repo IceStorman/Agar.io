@@ -2,6 +2,7 @@
 using SFML.Window;
 using SFML.System;
 using System;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace Agar.io
@@ -12,6 +13,7 @@ namespace Agar.io
         public const int default_window_height = 900;
         public const string game_name = "Agar.io";
         private readonly Random random = new Random();
+        public delegate void ParameterizedThreadStart(object obj);
 
         public void Run()
         {
@@ -33,11 +35,14 @@ namespace Agar.io
 
                 foreach(var player in realPlayers)
                 {
-                    //player.EatFood(foods);
+                    player.EatFood(foods);
+                    player.EatPlayer(bots);
                     window.Draw(player.playerSprite);
                 }
                 foreach(var bot in bots)
                 {
+                    bot.EatFood(foods);
+                    bot.EatPlayer(realPlayers);
                     window.Draw(bot.playerSprite);
                 }
                 foreach(var food in foods)
@@ -85,7 +90,6 @@ namespace Agar.io
             }
 
             food.foodSprite.FillColor = foodColor;
-            food.foodSprite.Origin = new Vector2f(food.foodSprite.Radius, food.foodSprite.Radius);
             food.foodSprite.Position = SetRandomPos();
 
             return food;
@@ -108,7 +112,7 @@ namespace Agar.io
 
         private void GetBotsInput(List<Player> bots)
         {
-            foreach(var bot in bots)
+            foreach (var bot in bots)
             {
                 Vector2f botInput = new Vector2f();
                 switch(random.Next(0, 4))
@@ -206,7 +210,7 @@ namespace Agar.io
                     break;
             }
             player.playerSprite.FillColor = playerColor;
-            player.playerSprite.Radius = player.size * 2;
+            player.playerSprite.Radius = player.size / 2;
             player.playerSprite.Origin = new Vector2f(player.playerSprite.Radius, player.playerSprite.Radius);
             player.playerSprite.Position = SetRandomPos();
             return player;
