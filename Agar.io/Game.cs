@@ -2,7 +2,6 @@
 using SFML.Window;
 using SFML.System;
 using System;
-using System.Threading;
 using System.Collections.Generic;
 
 namespace Agar.io
@@ -13,7 +12,6 @@ namespace Agar.io
         public const int default_window_height = 900;
         public const string game_name = "Agar.io";
         private readonly Random random = new Random();
-        public delegate void ParameterizedThreadStart(object obj);
 
         public void Run()
         {
@@ -27,6 +25,9 @@ namespace Agar.io
             {
                 window.Clear(Color.Cyan);
                 window.DispatchEvents();
+
+                if (foods.Count < foods.Capacity)
+                    foods.Add(SpawnFood(SetFoodType()));
 
                 GetBotsInput(bots);
                 GetRealPlayersInput(realPlayers);

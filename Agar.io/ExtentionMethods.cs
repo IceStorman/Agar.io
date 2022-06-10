@@ -52,7 +52,7 @@ namespace Agar.io
         private static double GetFoodDistance(Player player, Food food)
         {
             double distance = Math.Sqrt(Math.Pow(player.playerSprite.Position.X + player.playerSprite.Radius / 2 - food.foodSprite.Position.X + food.foodSprite.Radius / 2, 2)
-                + Math.Pow(player.playerSprite.Position.Y + player.playerSprite.Radius / 2- food.foodSprite.Position.Y + food.foodSprite.Radius / 2, 2));
+                + Math.Pow(player.playerSprite.Position.Y + player.playerSprite.Radius / 2 - food.foodSprite.Position.Y + food.foodSprite.Radius / 2, 2));
 
             return distance;
         }
