@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.1.32407.343
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agar.io", "Agar.io\Agar.io.csproj", "{13B53E7B-6A1B-43C0-B306-398F9FD912FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agario", "Agario\Agario.csproj", "{30B9346D-52D7-4F8D-89F7-C3C5597260E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13B53E7B-6A1B-43C0-B306-398F9FD912FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13B53E7B-6A1B-43C0-B306-398F9FD912FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13B53E7B-6A1B-43C0-B306-398F9FD912FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13B53E7B-6A1B-43C0-B306-398F9FD912FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30B9346D-52D7-4F8D-89F7-C3C5597260E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30B9346D-52D7-4F8D-89F7-C3C5597260E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30B9346D-52D7-4F8D-89F7-C3C5597260E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30B9346D-52D7-4F8D-89F7-C3C5597260E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {199DA453-A7DC-479E-BCD3-9C17DE7CD684}
+		SolutionGuid = {D49D66D7-9A7F-4610-BE2C-B664EA025DA1}
 	EndGlobalSection
 EndGlobal

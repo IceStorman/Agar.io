@@ -1,6 +1,6 @@
-﻿namespace Agar.io
+﻿namespace Agario
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {

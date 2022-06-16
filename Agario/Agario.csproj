@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13B53E7B-6A1B-43C0-B306-398F9FD912FF}</ProjectGuid>
+    <ProjectGuid>{30B9346D-52D7-4F8D-89F7-C3C5597260E0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Agar.io</RootNamespace>
-    <AssemblyName>Agar.io</AssemblyName>
+    <RootNamespace>Agario</RootNamespace>
+    <AssemblyName>Agario</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,9 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Agar.io.Program</StartupObject>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="SFML.Audio, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFML.Audio.2.5.0\lib\netstandard2.0\SFML.Audio.dll</HintPath>
@@ -58,19 +55,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomRandom.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="ExtentionMethods.cs" />
-    <Compile Include="Player.cs" />
     <Compile Include="Food.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="MovingObject.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
