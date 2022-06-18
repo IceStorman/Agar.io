@@ -22,6 +22,7 @@ namespace Agario
         private List<Food> foods;
         private List<Player> players;
         private List<Player> bots;
+        private List<Ball> balls;
 
         public void Run()
         {
@@ -53,6 +54,7 @@ namespace Agario
             foods = CreateFood();
             players = CreatePlayers(maxCountOfPlayers);
             bots = CreatePlayers(maxCountOfBots);
+            balls = new List<Ball>();
         }
 
         private void Update()
@@ -70,12 +72,14 @@ namespace Agario
             {
                 player.EatFood(foods);
                 player.EatPlayer(bots);
+                TryShoot(player);
             }
             foreach(var bot in bots)
             {
                 bot.EatFood(foods);
                 bot.EatPlayer(players);
             }
+            MoveBall();
 
             RenderObject();
 
@@ -90,6 +94,11 @@ namespace Agario
                 window.Draw(bot.Sprite);
             foreach (var food in foods)
                 window.Draw(food.Sprite);
+            if(balls != null)
+            {
+                foreach (var ball in balls)
+                    window.Draw(ball.Sprite);
+            }
         }
 
         private List<Food> CreateFood()
@@ -222,6 +231,41 @@ namespace Agario
                     return "Green";
             }
             return "";
+        }
+
+        private Ball SpawnBall(Player player)
+        {
+            CircleShape sprite = new CircleShape();
+            float size = 16f;
+            Vector2f direction = new Vector2f();
+
+            if (player.Direction != new Vector2f(0, 0))
+                direction = player.Direction;
+            else
+                direction = new Vector2f(1, 0);
+
+            float speed = player.Speed * 2;
+
+            Ball ball = new Ball(sprite, size, direction, speed);
+
+            ball.Sprite.Position = player.Sprite.Position;
+            ball.Sprite.Radius = size / 2;
+            ball.Sprite.FillColor = player.Sprite.FillColor;
+            return ball;
+        }
+
+        private void TryShoot(Player player)
+        {
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
+                balls.Add(SpawnBall(player));
+        }
+
+        private void MoveBall()
+        {
+            foreach(var ball in balls)
+            {
+                ball.Sprite.Position += ball.Speed * ball.Direction;
+            }
         }
 
         private void WindowClosed(object sender, EventArgs e)

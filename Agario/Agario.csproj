@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ball.cs" />
     <Compile Include="CustomRandom.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="ExtentionMethods.cs" />

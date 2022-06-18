@@ -5,7 +5,7 @@ namespace Agario
 {
     internal class CustomRandom
     {
-        Random random = new Random();
+        private readonly Random random = new Random();
 
         public int RandomValue(int minValue, int maxValue)
         {
