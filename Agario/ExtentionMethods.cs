@@ -71,7 +71,6 @@ namespace Agario
             {
                 if (player.Sprite.Radius + food.Sprite.Radius > GetFoodDistance(player, food))
                 {
-                    Console.WriteLine("Completed");
                     player.Size += food.Sprite.Radius;
                     eatenFoods.Add(food);
                 }

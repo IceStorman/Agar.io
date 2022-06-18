@@ -11,15 +11,13 @@ namespace Agario
     {
         private CustomRandom customRandom = new CustomRandom();
 
-        private const int default_window_width = 1600;
-        private const int default_window_height = 900;
-        private const string game_name = "Agar.io";
-
         private const int maxCountOfFood = 32;
         private const int maxCountOfPlayers = 1;
         private const int maxCountOfBots = 5;
 
-        private RenderWindow window = new RenderWindow(new VideoMode(default_window_width, default_window_height), game_name);
+        private static string[] gameParams;
+
+        private RenderWindow window;
 
         private List<Food> foods;
         private List<Player> players;
@@ -27,7 +25,6 @@ namespace Agario
 
         public void Run()
         {
-            window.Closed += WindowClosed;
             Start();
 
             while (window.IsOpen)
@@ -36,8 +33,23 @@ namespace Agario
             }
         }
 
+        private string[] ReadGameParams()
+        {
+            StreamReader sr = new StreamReader("filik.ini");
+            string[] gameParams = new string[3];
+
+            for(int i = 0; i < gameParams.Length; i++)
+            {
+                gameParams[i] = sr.ReadLine();
+            }
+            return gameParams;
+        }
+
         private void Start()
         {
+            gameParams = ReadGameParams();
+            window = new RenderWindow(new VideoMode(uint.Parse(gameParams[0]), uint.Parse(gameParams[1])), gameParams[2]);
+            window.Closed += WindowClosed;
             foods = CreateFood();
             players = CreatePlayers(maxCountOfPlayers);
             bots = CreatePlayers(maxCountOfBots);
@@ -120,7 +132,7 @@ namespace Agario
 
             food.Sprite.FillColor = foodColor;
             food.Sprite.Radius = food.Size / 2;
-            food.Sprite.Position = customRandom.RandomPos(default_window_width, default_window_height);
+            food.Sprite.Position = customRandom.RandomPos(int.Parse(gameParams[0]), int.Parse(gameParams[1]));
 
             return food;
         }
@@ -190,7 +202,7 @@ namespace Agario
 
             player.Sprite.FillColor = playerColor;
             player.Sprite.Radius = player.Size / 2;
-            player.Sprite.Position = customRandom.RandomPos(default_window_width, default_window_height);
+            player.Sprite.Position = customRandom.RandomPos(int.Parse(gameParams[0]), int.Parse(gameParams[1]));
             return player;
         }
 
