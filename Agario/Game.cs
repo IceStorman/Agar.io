@@ -9,7 +9,9 @@ namespace Agario
 {
     internal class Game
     {
-        private CustomRandom customRandom = new CustomRandom();
+        private string gameName;
+        private uint game_width;
+        private uint game_height;
 
         private const int maxCountOfFood = 32;
         private const int maxCountOfPlayers = 1;
@@ -49,7 +51,14 @@ namespace Agario
         private void Start()
         {
             gameParams = ReadGameParams();
-            window = new RenderWindow(new VideoMode(uint.Parse(gameParams[0]), uint.Parse(gameParams[1])), gameParams[2]);
+
+            game_width = uint.TryParse(gameParams[0], out uint width) ?
+                width : 1600;
+            game_height = uint.TryParse(gameParams[1], out uint height) ?
+                height : 900;
+            gameName = gameParams[2];
+
+            window = new RenderWindow(new VideoMode(game_width, game_height), gameName);
             window.Closed += WindowClosed;
             foods = CreateFood();
             players = CreatePlayers(maxCountOfPlayers);
@@ -79,7 +88,10 @@ namespace Agario
                 bot.EatFood(foods);
                 bot.EatPlayer(players);
             }
-            MoveBall();
+            foreach(var ball in balls)
+            {
+                ball.Move();
+            }
 
             RenderObject();
 
@@ -141,14 +153,14 @@ namespace Agario
 
             food.Sprite.FillColor = foodColor;
             food.Sprite.Radius = food.Size / 2;
-            food.Sprite.Position = customRandom.RandomPos(int.Parse(gameParams[0]), int.Parse(gameParams[1]));
+            food.Sprite.Position = CustomRandom.RandomPos((int)game_width, (int)game_height);
 
             return food;
         }
 
         private string SetFoodType()
         {
-            switch (customRandom.RandomValue(0, 3))
+            switch (CustomRandom.RandomValue(0, 3))
             {
                 case 0:
                     return "small";
@@ -211,13 +223,13 @@ namespace Agario
 
             player.Sprite.FillColor = playerColor;
             player.Sprite.Radius = player.Size / 2;
-            player.Sprite.Position = customRandom.RandomPos(int.Parse(gameParams[0]), int.Parse(gameParams[1]));
+            player.Sprite.Position = CustomRandom.RandomPos((int)game_width, (int)game_height);
             return player;
         }
 
         private string SetPlayerType()
         {
-            switch (customRandom.RandomValue(0, 5))
+            switch (CustomRandom.RandomValue(0, 5))
             {
                 case 0:
                     return "Blue";
@@ -237,12 +249,8 @@ namespace Agario
         {
             CircleShape sprite = new CircleShape();
             float size = 16f;
-            Vector2f direction = new Vector2f();
-
-            if (player.Direction != new Vector2f(0, 0))
-                direction = player.Direction;
-            else
-                direction = new Vector2f(1, 0);
+            Vector2f direction = player.Direction != new Vector2f(0, 0) ?
+                player.Direction : new Vector2f(1, 0);
 
             float speed = player.Speed * 2;
 
@@ -258,14 +266,6 @@ namespace Agario
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
                 balls.Add(SpawnBall(player));
-        }
-
-        private void MoveBall()
-        {
-            foreach(var ball in balls)
-            {
-                ball.Sprite.Position += ball.Speed * ball.Direction;
-            }
         }
 
         private void WindowClosed(object sender, EventArgs e)

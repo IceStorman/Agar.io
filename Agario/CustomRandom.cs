@@ -3,16 +3,16 @@ using SFML.System;
 
 namespace Agario
 {
-    internal class CustomRandom
+    internal static class CustomRandom
     {
-        private readonly Random random = new Random();
+        private static readonly Random random = new Random();
 
-        public int RandomValue(int minValue, int maxValue)
+        public static int RandomValue(int minValue, int maxValue)
         {
             return random.Next(minValue, maxValue);
         }
 
-        public Vector2f RandomPos(int x, int y)
+        public static Vector2f RandomPos(int x, int y)
         {
             Vector2f pos = new Vector2f(random.Next(0, x), random.Next(0, y));
             return pos;

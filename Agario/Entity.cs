@@ -4,7 +4,7 @@ namespace Agario
 {
     public abstract class Entity
     {
-        public abstract CircleShape Sprite { get; set; }
-        public abstract float Size { get; set; }
+        public virtual CircleShape Sprite { get; set; }
+        public virtual float Size { get; set; }
     }
 }

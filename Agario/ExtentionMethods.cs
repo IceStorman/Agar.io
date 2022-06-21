@@ -28,12 +28,11 @@ namespace Agario
 
         public static void GetBotInput(this List<Player> bots)
         {
-            CustomRandom customRandom = new CustomRandom();
             Vector2f direction;
 
             foreach(var bot in bots)
             {
-                switch (customRandom.RandomValue(0, 10))
+                switch (CustomRandom.RandomValue(0, 10))
                 {
                     case 0:
                         direction = new Vector2f(0, -1);
@@ -59,7 +58,7 @@ namespace Agario
         {
             foreach(var player in players)
             {
-                player.Sprite.Position += player.Speed * player.Direction;
+                player.Move();
             }
         }
 
