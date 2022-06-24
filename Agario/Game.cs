@@ -17,8 +17,6 @@ namespace Agario
         private const int maxCountOfPlayers = 1;
         private const int maxCountOfBots = 5;
 
-        private static string[] gameParams;
-
         private RenderWindow window;
 
         private List<Food> foods;
@@ -36,27 +34,14 @@ namespace Agario
             }
         }
 
-        private string[] ReadGameParams()
-        {
-            StreamReader sr = new StreamReader("filik.ini");
-            string[] gameParams = new string[3];
-
-            for(int i = 0; i < gameParams.Length; i++)
-            {
-                gameParams[i] = sr.ReadLine();
-            }
-            return gameParams;
-        }
-
         private void Start()
         {
-            gameParams = ReadGameParams();
+            FileManager.CreateFile();
+            FileManager.LoadFile();
 
-            game_width = uint.TryParse(gameParams[0], out uint width) ?
-                width : 1600;
-            game_height = uint.TryParse(gameParams[1], out uint height) ?
-                height : 900;
-            gameName = gameParams[2];
+            game_width = (uint)FileManager.SetUintValue(FileManager.gameProperties.gameWidth, 1600);
+            game_height = (uint)FileManager.SetUintValue(FileManager.gameProperties.gameHeight, 900);
+            gameName = FileManager.SetStringValue(FileManager.gameProperties.gameName, "game_name");
 
             window = new RenderWindow(new VideoMode(game_width, game_height), gameName);
             window.Closed += WindowClosed;
